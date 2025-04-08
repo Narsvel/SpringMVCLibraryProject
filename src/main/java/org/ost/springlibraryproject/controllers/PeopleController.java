@@ -1,7 +1,6 @@
 package org.ost.springlibraryproject.controllers;
 
 import jakarta.validation.Valid;
-import org.ost.springlibraryproject.dao.BookDAO;
 import org.ost.springlibraryproject.dao.PersonDAO;
 import org.ost.springlibraryproject.models.Person;
 import org.ost.springlibraryproject.util.PersonValidator;
@@ -17,13 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class PeopleController {
 
     private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO,BookDAO bookDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
         this.personValidator = personValidator;
     }
 
@@ -38,7 +35,7 @@ public class PeopleController {
     public String show(@PathVariable("id") int id, ModelMap modelMap) {
         //в этом методе получаем одного человека из DAO при GET запросе на /people/{id} и передадим на отображение
         modelMap.addAttribute("person", personDAO.show(id));
-        modelMap.addAttribute("books", bookDAO.indexPerson(id));
+        modelMap.addAttribute("books", personDAO.getBooksByPerson(id));
         return "people/show";
     }
 
