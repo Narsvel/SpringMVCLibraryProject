@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница человека</title>
+</head>
+<body>
+
+<p th:text="${person.getFullName()} + ', ' + ${person.getYearOfBirth()}">VALUE</p>
+
+<br/><!--пустая строка-->
+<hr/><!--создает линию-->
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getPersonId()})}">
+    <input type="submit" value="Редактировать."/>
+</form>
+<br/><!--пустая строка-->
+<!--используем форму <form> т.к. с помощью тэга <a> можно отправлять только GET запрос-->
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
+    <input type="submit" value="Удалить!"/>
+</form>
+</body>
+</html>
