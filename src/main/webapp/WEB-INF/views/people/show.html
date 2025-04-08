@@ -8,15 +8,31 @@
 
 <p th:text="${person.getFullName()} + ', ' + ${person.getYearOfBirth()}">VALUE</p>
 
+<div th:if="${books.isEmpty()}">
+    <p>Человек пока не взял ни одной книги</p>
+</div>
+
+<div th:unless="${books.isEmpty()}">
+    <hr/> <!-- добавляет линию -->
+    <b>Книги:</b>
+    <div th:each="book : ${books}"> <!-- с помощью thymeleaf проходим по элементам books -->
+        <a th:href="@{/books/{id}(id=${book.getBookId()})}"
+           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a> <!-- сктрока является ссылкой на /books/{id} -->
+    </div>
+</div>
+
 <br/><!--пустая строка-->
 <hr/><!--создает линию-->
+
 <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getPersonId()})}">
     <input type="submit" value="Редактировать."/>
 </form>
+
 <br/><!--пустая строка-->
-<!--используем форму <form> т.к. с помощью тэга <a> можно отправлять только GET запрос-->
+
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
     <input type="submit" value="Удалить!"/>
 </form>
+
 </body>
 </html>

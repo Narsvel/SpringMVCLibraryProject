@@ -9,5 +9,5 @@ create table Book (
      person_id int REFERENCES person(person_id) ON DELETE SET NULL,
      title varchar NOT NULL,
      author varchar NOT NULL,
-     age int NOT NULL
+     year int NOT NULL
 )

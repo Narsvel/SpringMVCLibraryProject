@@ -1,12 +1,14 @@
 package org.ost.springlibraryproject.controllers;
 
 import jakarta.validation.Valid;
+import org.ost.springlibraryproject.dao.BookDAO;
 import org.ost.springlibraryproject.dao.PersonDAO;
 import org.ost.springlibraryproject.models.Person;
 import org.ost.springlibraryproject.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO,BookDAO bookDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
         this.personValidator = personValidator;
     }
 
@@ -31,9 +35,10 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, ModelMap modelMap) {
         //в этом методе получаем одного человека из DAO при GET запросе на /people/{id} и передадим на отображение
-        model.addAttribute("person", personDAO.show(id));
+        modelMap.addAttribute("person", personDAO.show(id));
+        modelMap.addAttribute("books", bookDAO.indexPerson(id));
         return "people/show";
     }
 

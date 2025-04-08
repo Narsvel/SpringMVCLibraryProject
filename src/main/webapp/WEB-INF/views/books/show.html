@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница книги</title>
+</head>
+<body>
+
+<p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
+<br/>
+
+<div th:if="${book.isPersonId()}">
+    <span>Эта книга свободна. Кому назначить её?</span>
+    <form th:method="PATCH" th:action="@{/books/addPerson/{id}(id=${book.getBookId()})}" >  <!-- на адрес /books/addPerson/{id}(id=${book.getId()} будет отправляться наш PATCH запрос с выбранным пользователем -->
+        <label for="person">Выберите человека</label>
+        <select th:object="${person}" th:field="*{personId}" id="person"> <!-- th:field="*{id}" указываем поле которое выбирается в объекте person и лежит в value -->
+            <option th:each="person : ${people}" th:value="${person.getPersonId()}"
+                    th:text="${person.getFullName()}"></option> <!-- th:each="person : ${people}" итерация по списку people -->
+            <!-- th:value="${person.getId()}" ид выбранного человека будет отправляться на сервер при выборе option -->
+            <!-- th:text="${person.getName()}" текст отображаемый пользователю -->
+        </select>
+        <input type="submit" value="Назначить книгу" />
+    </form>
+</div>
+
+<div th:unless="${book.isPersonId()}">
+    <form th:method="PATCH" th:action="@{/books/deletePerson/{id}(id=${book.getBookId()})}" >  <!-- на адрес /books/addPerson/{id}(id=${book.getId()} будет отправляться наш PATCH запрос с выбранным пользователем -->
+        <a th:href="@{/people/{id}(id=${personup.getPersonId()})}"
+           th:text="${'Книга сейчас у: ' + personup.getFullName()}">VALUE</a>
+        <input type="submit" value="Освободить книгу" />
+    </form>
+</div>
+
+<br/><!--пустая строка-->
+<hr/><!--создает линию-->
+
+<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getBookId()})}">
+  <input type="submit" value="Редактировать."/>
+</form>
+
+<br/><!--пустая строка-->
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBookId()})}">
+  <input type="submit" value="Удалить!"/>
+</form>
+
+</body>
+</html>
